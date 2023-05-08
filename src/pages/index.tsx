@@ -1,4 +1,4 @@
-import { SignIn } from "@clerk/nextjs";
+import { SignIn, SignInButton, useUser } from "@clerk/nextjs";
 import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
@@ -8,6 +8,8 @@ import { api } from "~/utils/api";
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
 
+  const user = useUser();
+
   return (
     <>
       <Head>
@@ -16,6 +18,12 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
+        {!!user.isSignedIn && (
+          <SignInButton mode="modal">
+            <button className="btn">Sign in</button>
+          </SignInButton>
+        )}
+
         <SignIn path="/sign-in" routing="path" signUpUrl="/sign-up" />
       </main>
     </>
